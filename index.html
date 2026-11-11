@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f4">
+  <meta name="description" content="Thoughtful everyday objects, chosen to make the ordinary feel a little better.">
+  <title>Form & Field — Thoughtful things for everyday</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="announcement">A little more considered. Free shipping on orders over $75.</div>
+  <header class="site-header">
+    <button class="icon-button menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="wordmark" href="#home" aria-label="Form and Field home">form<span>&</span>field</a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="#shop">Shop all</a><a href="#shop" data-nav-category="Home">Home</a><a href="#shop" data-nav-category="Objects">Objects</a><a href="#story">Our approach</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-button search-toggle" id="searchToggle" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></button>
+      <button class="bag-button" id="bagToggle" aria-label="Open shopping bag">Bag <span class="bag-count" id="bagCount">0</span></button>
+    </div>
+  </header>
+  <div class="mobile-menu" id="mobileMenu" hidden><a href="#shop">Shop all</a><a href="#shop" data-nav-category="Home">Home</a><a href="#shop" data-nav-category="Objects">Objects</a><a href="#story">Our approach</a></div>
+  <form class="search-bar" id="searchBar" role="search" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><input id="searchInput" type="search" placeholder="Search the collection" aria-label="Search products"><button type="button" class="search-close" id="searchClose" aria-label="Close search">×</button></form>
+
+  <main id="home">
+    <section class="hero">
+      <img class="hero-image" src="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=2200&q=85" alt="Calm, sunlit living space with thoughtfully chosen home objects">
+      <div class="hero-shade"></div>
+      <div class="hero-copy"><span class="eyebrow light">A slower kind of shopping</span><h1>Good things,<br>well considered.</h1><p>Useful, beautiful objects for the everyday. Chosen with care, made to stay.</p><a class="button button-light" href="#shop">Explore the collection <span aria-hidden="true">↗</span></a></div>
+      <span class="hero-note">A collection for living well · Vol. 01</span>
+    </section>
+
+    <section class="intro section-wrap" id="shop">
+      <div><span class="eyebrow">The considered edit</span><h2>Less, but better.</h2></div>
+      <p>Everyday essentials with a little more thought behind them. Meet your new keepers.</p>
+    </section>
+    <section class="shop-controls section-wrap" aria-label="Filter products">
+      <div class="category-list" id="categoryList"><button class="category-chip active" data-category="All">All pieces <span>08</span></button><button class="category-chip" data-category="Home">Home <span>03</span></button><button class="category-chip" data-category="Objects">Objects <span>03</span></button><button class="category-chip" data-category="Wear">Wear <span>02</span></button></div>
+      <label class="sort-control">Sort <select id="sortSelect" aria-label="Sort products"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></label>
+    </section>
+    <section class="product-grid section-wrap" id="productGrid" aria-live="polite"></section>
+    <section class="quote-band" id="story"><div class="quote-mark">“</div><blockquote>Buy fewer things. Choose them well.<br>Make room for what matters.</blockquote><span class="eyebrow">Our little philosophy</span></section>
+    <section class="newsletter section-wrap"><div><span class="eyebrow">Notes from the studio</span><h2>A good thing<br>in your inbox.</h2><p>New finds, useful ideas, no unnecessary noise.</p></div><form id="newsletterForm"><label class="sr-only" for="emailInput">Email address</label><input id="emailInput" type="email" placeholder="Your email address" required><button type="submit" aria-label="Subscribe">Join us <span>↗</span></button><small id="newsletterMessage">By signing up, you agree to receive the occasional note from us.</small></form></section>
+  </main>
+  <footer class="site-footer"><a class="wordmark" href="#home">form<span>&</span>field</a><p>Thoughtful things for everyday.</p><div class="footer-links"><a href="#shop">Shop</a><a href="#story">Our approach</a><a href="mailto:hello@example.com">Contact</a></div><small>© <span id="year"></span> Form & Field. Made for everyday living.</small></footer>
+
+  <div class="overlay" id="overlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping bag" aria-modal="true" role="dialog" aria-hidden="true">
+    <div class="drawer-head"><div><span class="eyebrow">Your selection</span><h2>Your bag <span id="drawerCount">(0)</span></h2></div><button class="icon-button close-drawer" id="closeDrawer" aria-label="Close bag">×</button></div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-empty" id="cartEmpty"><div class="empty-icon">○</div><h3>Your bag is taking a breather.</h3><p>Find something you'll love living with.</p><button class="text-link" id="continueShopping">Keep exploring ↗</button></div>
+    <div class="cart-footer" id="cartFooter"><div class="subtotal"><span>Subtotal</span><strong id="cartSubtotal">$0.00</strong></div><p>Shipping and taxes calculated at checkout.</p><button class="button button-dark checkout-button" id="checkoutButton">Continue to checkout <span>↗</span></button><div class="paypal-note"><span class="paypal-word">PayPal</span> available at checkout</div></div>
+  </aside>
+  <dialog id="checkoutDialog" class="checkout-dialog"><button class="dialog-close" id="closeCheckout" aria-label="Close">×</button><span class="eyebrow">One last step</span><h2>Checkout</h2><p class="checkout-total">Your subtotal <strong id="checkoutTotal">$0.00</strong></p><p class="paypal-explainer">Complete your purchase securely with PayPal. Your PayPal button is configured in <code>app.js</code>.</p><div id="paypalMount"></div><p class="paypal-setup" id="paypalSetup">Add your PayPal hosted button ID in <code>app.js</code> to enable checkout.</p><button class="text-link dialog-back" id="backToBag">← Back to bag</button></dialog>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
