@@ -1,4 +1,4 @@
-// 123kids storefront: Jotform verification followed by $5 hosted PayPal checkout.
+// 123kids storefront: optional email verification and PayPal checkout.
 const toast = document.querySelector('#toast');
 let toastTimer;
 
@@ -13,9 +13,9 @@ const style = document.createElement('style');
 style.textContent = `
 .verification-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(40,52,58,.72)}
 .verification-modal.open{display:flex}
-.verification-dialog{position:relative;width:min(680px,100%);max-height:92vh;border-radius:18px;background:#fffaf0;box-shadow:0 20px 60px rgba(40,52,58,.35);overflow:hidden}
+.verification-dialog,.verification-price{position:relative;width:min(680px,100%);max-height:92vh;border-radius:18px;background:#fffaf0;box-shadow:0 20px 60px rgba(40,52,58,.35);overflow:auto}
 .verification-dialog iframe{display:block;width:100%;height:min(78vh,700px);border:0}
-.verification-price{position:relative;display:none;text-align:center;padding:48px 18px 18px}.verification-price.ready{display:block}
+.verification-price{display:none;text-align:center;padding:48px 18px 18px}.verification-price.ready{display:block}
 #verified-paypal{min-height:55px;margin:12px auto 0}
 .verification-close{position:absolute;top:10px;right:12px;z-index:2;width:40px;height:40px;border:0;border-radius:50%;background:#fff;color:#28343a;font-size:28px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(40,52,58,.25)}
 .verification-close:hover{background:#ffda58}
@@ -27,16 +27,16 @@ modal.id = 'verificationModal';
 modal.className = 'verification-modal';
 modal.setAttribute('role', 'dialog');
 modal.setAttribute('aria-modal', 'true');
-modal.setAttribute('aria-label', 'Verify email for 50 percent off');
+modal.setAttribute('aria-label', 'Optional email verification and checkout');
 modal.innerHTML = `
   <div class="verification-dialog">
-    <button class="verification-close" id="verificationClose" type="button" aria-label="Close verification form">×</button>
-    <iframe title="Verify email with Jotform" src="https://form.jotform.com/263265036863057"></iframe>
+    <button class="verification-close" id="verificationClose" type="button" aria-label="Close email form and continue to checkout">×</button>
+    <iframe title="Optional email verification with Jotform" src="https://form.jotform.com/263265036863057"></iframe>
   </div>
   <div class="verification-price" id="verificationPrice">
     <button class="verification-close" id="verificationCloseCheckout" type="button" aria-label="Close checkout">×</button>
-    <h2>Email verified</h2>
-    <p>Verified 50% checkout price: $5 per book</p>
+    <h2 id="checkoutHeading">Checkout</h2>
+    <p id="checkoutMessage">You can check out without submitting an email. PayPal button price: $5 per item.</p>
     <div id="verified-paypal"></div>
   </div>
 `;
@@ -44,9 +44,9 @@ document.body.appendChild(modal);
 
 const url = new URL(window.location.href);
 const visitKey = `123kidsVerificationShown:${url.origin}${url.pathname}${url.search}`;
-const verificationAlreadyShown = sessionStorage.getItem(visitKey) === 'true';
+let verificationShownThisVisit = sessionStorage.getItem(visitKey) === 'true';
+let guestCheckoutEnabled = sessionStorage.getItem('123kidsGuestCheckout') === 'true';
 let isVerified = url.searchParams.get('email_verified') === '1' || sessionStorage.getItem('123kidsEmailVerified') === 'true';
-let verificationShownThisVisit = verificationAlreadyShown;
 
 if (url.searchParams.get('email_verified') === '1') {
   sessionStorage.setItem('123kidsEmailVerified', 'true');
@@ -60,18 +60,25 @@ function closeModal() {
 }
 
 function openVerification() {
-  if (verificationShownThisVisit) return;
+  if (verificationShownThisVisit) {
+    if (guestCheckoutEnabled) showCheckout();
+    return;
+  }
   verificationShownThisVisit = true;
   sessionStorage.setItem(visitKey, 'true');
-  modal.classList.add('open');
   document.querySelector('.verification-dialog').style.display = '';
   document.querySelector('#verificationPrice').classList.remove('ready');
+  modal.classList.add('open');
 }
 
-function showVerifiedCheckout() {
-  modal.classList.add('open');
+function showCheckout() {
   document.querySelector('.verification-dialog').style.display = 'none';
   document.querySelector('#verificationPrice').classList.add('ready');
+  document.querySelector('#checkoutHeading').textContent = isVerified ? 'Email verified — checkout' : 'Checkout';
+  document.querySelector('#checkoutMessage').textContent = isVerified
+    ? 'Your verified checkout price is $5 per item.'
+    : 'Email is optional. Continue to PayPal at $5 per item.';
+  modal.classList.add('open');
 
   if (!document.querySelector('#paypal-sdk')) {
     const sdk = document.createElement('script');
@@ -91,7 +98,13 @@ function renderPayPal() {
   window.paypal.HostedButtons({ hostedButtonId: 'LYRQKCG3HUQ6J' }).render('#verified-paypal');
 }
 
-document.querySelector('#verificationClose').addEventListener('click', closeModal);
+// Closing the optional form grants guest checkout for the rest of this tab visit.
+document.querySelector('#verificationClose').addEventListener('click', () => {
+  guestCheckoutEnabled = true;
+  sessionStorage.setItem('123kidsGuestCheckout', 'true');
+  closeModal();
+  showCheckout();
+});
 document.querySelector('#verificationCloseCheckout').addEventListener('click', closeModal);
 modal.addEventListener('click', (event) => {
   if (event.target === modal) closeModal();
@@ -100,27 +113,24 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && modal.classList.contains('open')) closeModal();
 });
 
-if (isVerified) showVerifiedCheckout();
-
 const bookNames = {
   'first-book': 'My First Big Coloring Book',
   'explorers-book': 'Little Explorers Coloring Adventures'
 };
-
 const cart = [];
 document.querySelectorAll('[data-product]').forEach((button) => {
   button.addEventListener('click', () => {
     const id = button.dataset.product;
     if (id === 'both-books') {
       cart.push(bookNames['first-book'], bookNames['explorers-book']);
-      announce(isVerified ? 'Both coloring books selected — verified price: $10.' : 'Verify email to unlock both books for $10.');
+      announce('Both coloring books added to your bag.');
     } else {
       cart.push(bookNames[id]);
-      announce(isVerified ? `${bookNames[id]} selected — verified price: $5.` : `${bookNames[id]} selected — verify email to unlock the $5 price.`);
+      announce(`${bookNames[id]} added to your bag.`);
     }
 
-    if (!isVerified) openVerification();
-    else showVerifiedCheckout();
+    if (guestCheckoutEnabled || isVerified) showCheckout();
+    else openVerification();
   });
 });
 
@@ -129,9 +139,7 @@ newsletterForm.action = 'https://form.jotform.com/263265036863057';
 newsletterForm.target = '_blank';
 newsletterForm.method = 'post';
 newsletterForm.addEventListener('submit', () => {
-  document.querySelector('#newsletterMessage').textContent = 'Jotform verification opened. Complete email verification, then return to 123kids.';
+  document.querySelector('#newsletterMessage').textContent = 'Email is optional. You can close the form to continue to checkout.';
 });
-
-// Visiting the email-offer signup also triggers the one-time-per-URL verification modal.
 newsletterForm.addEventListener('focusin', openVerification, { once: true });
 document.querySelector('#year').textContent = new Date().getFullYear();
