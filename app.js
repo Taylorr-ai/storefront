@@ -43,10 +43,14 @@ modal.innerHTML = `
 document.body.appendChild(modal);
 
 const url = new URL(window.location.href);
-const isVerified = url.searchParams.get('email_verified') === '1' || sessionStorage.getItem('123kidsEmailVerified') === 'true';
+const visitKey = `123kidsVerificationShown:${url.origin}${url.pathname}${url.search}`;
+const verificationAlreadyShown = sessionStorage.getItem(visitKey) === 'true';
+let isVerified = url.searchParams.get('email_verified') === '1' || sessionStorage.getItem('123kidsEmailVerified') === 'true';
+let verificationShownThisVisit = verificationAlreadyShown;
 
 if (url.searchParams.get('email_verified') === '1') {
   sessionStorage.setItem('123kidsEmailVerified', 'true');
+  isVerified = true;
   url.searchParams.delete('email_verified');
   window.history.replaceState({}, document.title, url.pathname + (url.search ? url.search : '') + url.hash);
 }
@@ -56,6 +60,9 @@ function closeModal() {
 }
 
 function openVerification() {
+  if (verificationShownThisVisit) return;
+  verificationShownThisVisit = true;
+  sessionStorage.setItem(visitKey, 'true');
   modal.classList.add('open');
   document.querySelector('.verification-dialog').style.display = '';
   document.querySelector('#verificationPrice').classList.remove('ready');
@@ -125,4 +132,6 @@ newsletterForm.addEventListener('submit', () => {
   document.querySelector('#newsletterMessage').textContent = 'Jotform verification opened. Complete email verification, then return to 123kids.';
 });
 
+// Visiting the email-offer signup also triggers the one-time-per-URL verification modal.
+newsletterForm.addEventListener('focusin', openVerification, { once: true });
 document.querySelector('#year').textContent = new Date().getFullYear();
