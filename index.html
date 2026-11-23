@@ -4,58 +4,65 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#fff8e8">
-  <meta name="description" content="Playful coloring books and learning tools for curious kids ages 0–6.">
-  <title>123kids — Little learning, big discoveries</title>
-  <link rel="preconnect" href="https://images.unsplash.com">
+  <meta name="description" content="Meet the 123kids coloring books: 25 playful, hand-drawn pages for little artists ages 0–6. Printable editions planned for US Letter and A4.">
+  <link rel="canonical" href="https://www.123kids.shop/">
+  <meta property="og:title" content="123kids — Coloring books for little artists">
+  <meta property="og:description" content="Two joyful coloring books, 25 pages each, for ages 0–6.">
+  <meta property="og:url" content="https://www.123kids.shop/">
+  <meta property="og:type" content="website">
+  <title>123kids — Coloring books for little artists</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="announcement">Learning delivered with a little extra joy · Free shipping on orders over $50</div>
+  <div class="announcement">A little color, a lot of happy · Digital coloring books for ages 0–6</div>
   <header class="site-header">
-    <button class="icon-button menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-    <a class="wordmark" href="#home" aria-label="123kids home">123<span>kids</span></a>
-    <nav class="desktop-nav" aria-label="Main navigation">
-      <a href="#shop">Shop all</a><a href="#shop" data-nav-category="Coloring">Coloring</a><a href="#shop" data-nav-category="Learning">Learning</a><a href="#story">Our promise</a>
-    </nav>
-    <div class="header-actions">
-      <button class="icon-button search-toggle" id="searchToggle" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></button>
-      <button class="bag-button" id="bagToggle" aria-label="Open shopping bag">Bag <span class="bag-count" id="bagCount">0</span></button>
-    </div>
+    <a class="wordmark" href="#home" aria-label="123kids home">123<span>kids</span><i>♥</i></a>
+    <nav aria-label="Main navigation"><a href="#books">Our books</a><a href="#why">Why parents love them</a><a href="#email-offer">Email offer</a></nav>
+    <a class="header-cta" href="#books">Explore the books <span aria-hidden="true">↗</span></a>
   </header>
-  <div class="mobile-menu" id="mobileMenu" hidden><a href="#shop">Shop all</a><a href="#shop" data-nav-category="Coloring">Coloring</a><a href="#shop" data-nav-category="Learning">Learning</a><a href="#story">Our promise</a></div>
-  <form class="search-bar" id="searchBar" role="search" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><input id="searchInput" type="search" placeholder="Search for books and learning tools" aria-label="Search products"><button type="button" id="searchClose" aria-label="Close search">×</button></form>
-
   <main id="home">
     <section class="hero">
-      <img class="hero-image" src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=2200&q=85" alt="A young child enjoying a colorful learning activity">
-      <div class="hero-shade"></div>
-      <div class="hero-copy"><span class="eyebrow light">Made for ages 0–6</span><h1>Little moments.<br>Big discoveries.</h1><p>Coloring books and playful learning tools that grow confidence, curiosity, and creativity.</p><a class="hero-link" href="#shop">Explore the collection <span>→</span></a></div>
-      <span class="hero-note">Play · Imagine · Learn · Vol. 01</span>
+      <div class="hero-copy"><span class="eyebrow"><span class="sparkle">✦</span> Little artists welcome</span><h1>Big color for<br><em>little imaginations.</em></h1><p>Meet two hand-drawn coloring adventures made for curious kids, cozy afternoons, and proud fridge galleries.</p><a class="button button-coral" href="#books">Find their new favorite <span aria-hidden="true">↓</span></a><div class="hero-note"><span>♡</span> Made with little hands—and their grown-ups—in mind</div></div>
+      <div class="hero-art" aria-label="Playful illustrated rainbow, sun and smiling animals">
+        <div class="sun-doodle">✳</div><div class="rainbow"><span></span><span></span><span></span><span></span></div>
+        <div class="doodle-cloud cloud-one">☁</div><div class="doodle-cloud cloud-two">☁</div>
+        <div class="animal animal-bunny"><span class="ear ear-one"></span><span class="ear ear-two"></span><span class="face">•ᴗ•</span><span class="cheek"></span></div>
+        <div class="animal animal-bear"><span class="ear ear-one"></span><span class="ear ear-two"></span><span class="face">•ᴥ•</span><span class="cheek"></span></div>
+        <div class="hero-sticker">Color<br>outside<br>the lines!</div>
+      </div>
+      <div class="hero-bottom"><span>Drawn with joy</span><span>✿</span><span>Printed at home</span><span>✿</span><span>Made for little learners</span></div>
     </section>
 
-    <section class="intro section-wrap" id="shop">
-      <div><span class="eyebrow">The happy-learning edit</span><h2>Made for tiny learners.</h2></div>
-      <p>Screen-free activities for little hands and growing minds.</p>
+    <section class="intro section-wrap" id="books"><div><span class="eyebrow">The 123kids coloring collection</span><h2>Two books. <span>Endless color.</span></h2></div><p>Choose a gentle first coloring adventure or a playful expedition for growing artists.</p></section>
+    <section class="product-grid section-wrap" aria-label="Coloring books">
+      <article class="product-card">
+        <a class="book-cover cover-link" href="#email-offer" aria-label="Learn about My First Big Coloring Book">
+          <img src="assets/my-first-coloring-book.svg" alt="Cover: My First Big Coloring Book, with a smiling puppy, kitten, sun, and flowers">
+          <span class="cover-badge">AGES 0–3</span>
+        </a>
+        <div class="product-info"><div class="product-title-line"><div><span class="product-kicker">A sweet first scribble</span><h3>My First Big Coloring Book</h3></div><strong class="price">$10<span> USD</span></strong></div><p>25 big, bold pages of friendly animals, favorite toys, and simple happy things to color together.</p><ul class="feature-list"><li>Extra-simple shapes &amp; chunky outlines</li><li>Printable PDF editions planned: US Letter + A4</li><li>Occasional easy “Can you find…?” prompts</li></ul><button class="button button-dark add-button" type="button" data-product="first-book">Add to bag <span aria-hidden="true">＋</span></button></div>
+      </article>
+      <article class="product-card">
+        <a class="book-cover cover-link" href="#email-offer" aria-label="Learn about Little Explorers Coloring Adventures">
+          <img src="assets/little-explorers-coloring-book.svg" alt="Cover: Little Explorers Coloring Adventures, with a smiling lion, rocket, rainbow, and stars">
+          <span class="cover-badge badge-blue">AGES 4–6</span>
+        </a>
+        <div class="product-info"><div class="product-title-line"><div><span class="product-kicker">For curious color explorers</span><h3>Little Explorers Coloring Adventures</h3></div><strong class="price">$10<span> USD</span></strong></div><p>25 imaginative pages with animals, vehicles, ocean friends, and tiny activities for curious minds.</p><ul class="feature-list"><li>Playful scenes with a little more detail</li><li>Printable PDF editions planned: US Letter + A4</li><li>Simple look-and-find prompts along the way</li></ul><button class="button button-dark add-button" type="button" data-product="explorers-book">Add to bag <span aria-hidden="true">＋</span></button></div>
+      </article>
     </section>
-    <section class="shop-controls section-wrap" aria-label="Filter products">
-      <div class="category-list" id="categoryList"><button class="category-chip active" data-category="All">All finds <span>08</span></button><button class="category-chip" data-category="Coloring">Coloring <span>04</span></button><button class="category-chip" data-category="Learning">Learning <span>04</span></button></div>
-      <label class="sort-control">Sort <select id="sortSelect" aria-label="Sort products"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="name">Name: A to Z</option></select></label>
-    </section>
-    <section class="product-grid section-wrap" id="productGrid" aria-live="polite"></section>
-    <section class="quote-band" id="story"><div class="quote-mark">“</div><blockquote>Every scribble is a step toward<br>thinking, imagining, and growing.</blockquote><span class="eyebrow">Our little promise</span></section>
-    <section class="newsletter section-wrap"><div><span class="eyebrow">The 123kids club</span><h2>Fresh play ideas<br>in your inbox.</h2><p>New activities, learning tips, and first looks.</p></div><form id="newsletterForm"><label for="newsletterEmail" class="sr-only">Email address</label><input id="newsletterEmail" type="email" placeholder="Your email address" required><button type="submit">Join in <span>→</span></button><p id="newsletterMessage" class="newsletter-message" aria-live="polite"></p></form></section>
+    <section class="bundle-band section-wrap"><span class="bundle-icon">✿</span><div><span class="eyebrow">Double the doodles</span><h2>Make it a coloring duo.</h2><p>Add both books for <strong>$20</strong> before any eligible email offer.</p></div><button class="button button-coral" type="button" data-product="both-books">Add both books <span aria-hidden="true">＋</span></button></section>
+
+    <section class="parent-promise" id="why"><div class="section-wrap promise-inner"><div><span class="eyebrow">A little note for grown-ups</span><h2>Made for real-life<br>little artists.</h2><p>Easy to print, lovely to share, and thoughtfully designed to make screen-free time feel like play—not a lesson.</p></div><div class="promise-points"><article><span>✎</span><div><h3>Friendly freehand art</h3><p>Warm, hand-drawn-looking illustrations with cheerful characters and clear shapes.</p></div></article><article><span>♡</span><div><h3>Age-aware pages</h3><p>Big, simple forms for the littlest artists; more to notice and explore for ages 4–6.</p></div></article><article><span>⌂</span><div><h3>Print at home</h3><p>US Letter and A4 printable editions are planned for each 25-page book.</p></div></article></div></div></section>
+
+    <section class="email-offer section-wrap" id="email-offer"><div class="offer-copy"><span class="eyebrow">A welcome treat from 123kids</span><h2>Get <em>50% off</em><br>your first book.</h2><p>Sign up for occasional product and service updates, then verify your email to receive a 50%-off code. Each $10 book will be $5 with the code.</p><div class="offer-note"><span>♡</span> Your email is for 123kids updates only. Unsubscribe whenever you like.</div></div><form class="signup-card" id="newsletterForm"><label for="email">Your grown-up email address</label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+      <label class="consent"><input type="checkbox" id="marketingConsent" required><span>Yes, send me occasional 123kids product and service updates. I understand I need to verify my email to receive the discount.</span></label>
+      <button class="button button-dark" type="submit">Sign me up <span aria-hidden="true">→</span></button><p class="form-message" id="newsletterMessage" role="status">Email verification and coupon delivery will be available once signup is connected.</p><small>No email is sent or stored by this preview form.</small></form></section>
   </main>
-  <footer class="site-footer"><a class="wordmark" href="#home">123<span>kids</span></a><p>Big joy for little learners.</p><div class="footer-links"><a href="#shop">Shop</a><a href="#story">Our promise</a><a href="mailto:hello@123kids.com">Contact</a></div><span class="copyright">© <span id="year"></span> 123kids</span></footer>
-
-  <div class="overlay" id="overlay" hidden></div>
-  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping bag" aria-modal="true" role="dialog" aria-hidden="true">
-    <div class="drawer-head"><div><span class="eyebrow">Your selection</span><h2>Your bag <span id="drawerCount">(0)</span></h2></div><button class="icon-button close-drawer" id="closeDrawer" aria-label="Close bag">×</button></div>
-    <div class="cart-items" id="cartItems"></div>
-    <div class="cart-empty" id="cartEmpty"><div class="empty-icon">○</div><h3>Your bag is ready for fun.</h3><p>Find something your little learner will love.</p><button class="text-link" id="continueShopping">Keep exploring</button></div>
-    <div class="cart-footer" id="cartFooter"><div class="subtotal"><span>Subtotal</span><strong id="cartSubtotal">$0.00</strong></div><p>Shipping and taxes calculated at checkout.</p><button class="checkout-button" id="checkoutButton">Continue to checkout <span>→</span></button></div>
-  </aside>
-  <dialog id="checkoutDialog" class="checkout-dialog"><button class="dialog-close" id="closeCheckout" aria-label="Close">×</button><span class="eyebrow">One last step</span><h2>Checkout</h2><p class="checkout-copy">Checkout is ready to connect to PayPal.</p><div id="paypalMount"></div><button class="text-link" id="backToBag">Back to your bag</button></dialog>
-
-  <script src="app.js" defer></script>
+  <footer class="site-footer"><div><a class="wordmark" href="#home">123<span>kids</span><i>♥</i></a><p>Big joy for little learners.</p></div><div class="footer-right"><a href="https://www.123kids.shop/">www.123kids.shop</a><span>© <span id="year"></span> 123kids</span></div></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

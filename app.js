@@ -1,42 +1,31 @@
-// 123kids learning collection
-const PRODUCTS = [
-  {id:'alphabet-coloring',name:'My First Alphabet Coloring Book',description:'Ages 2–5 · 40 reusable-looking pages',category:'Coloring',price:14,tag:'Bestseller',image:'https://images.unsplash.com/photo-1596464716127-f2a82984de30?auto=format&fit=crop&w=900&q=85'},
-  {id:'number-animals',name:'Count the Animals',description:'Ages 3–6 · Numbers 1–20',category:'Coloring',price:16,tag:'New',image:'https://images.unsplash.com/photo-1560785496-3c9d27877182?auto=format&fit=crop&w=900&q=85'},
-  {id:'shape-doodle',name:'Shape & Doodle Adventures',description:'Ages 2–4 · 35 activity pages',category:'Coloring',price:12,tag:'',image:'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=900&q=85'},
-  {id:'under-the-sea',name:'Under the Sea Coloring Book',description:'Ages 3–6 · Ocean friends',category:'Coloring',price:15,tag:'Kid favorite',image:'https://images.unsplash.com/photo-1559304787-945aa4341065?auto=format&fit=crop&w=900&q=85'},
-  {id:'letter-flashcards',name:'Alphabet Adventure Cards',description:'Ages 2–5 · 52 sturdy cards',category:'Learning',price:18,tag:'Bestseller',image:'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=900&q=85'},
-  {id:'counting-cubes',name:'Happy Counting Cubes',description:'Ages 3–6 · 100 colorful pieces',category:'Learning',price:24,tag:'Screen-free',image:'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=900&q=85'},
-  {id:'matching-memory',name:'Little Learners Memory Game',description:'Ages 3–6 · 24 matching pairs',category:'Learning',price:20,tag:'',image:'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=900&q=85'},
-  {id:'busy-board',name:'First Skills Activity Board',description:'Ages 1–4 · Fine-motor practice',category:'Learning',price:28,tag:'New',image:'https://images.unsplash.com/photo-1599446792307-6c3a1cf4ef8a?auto=format&fit=crop&w=900&q=85'}
-];
-
-const PAYPAL_HOSTED_BUTTON_ID = 'YOUR_PAYPAL_HOSTED_BUTTON_ID';
-const PAYPAL_ENVIRONMENT = 'www.paypal.com';
-
-const $ = (selector, root=document) => root.querySelector(selector);
-const grid = $('#productGrid');
-const cartDrawer = $('#cartDrawer');
-const overlay = $('#overlay');
-let category = 'All';
-let searchTerm = '';
-let cart = loadCart();
-function loadCart(){try{return JSON.parse(localStorage.getItem('123kids-cart')||'{}')}catch{return {}}}
-function saveCart(){localStorage.setItem('123kids-cart',JSON.stringify(cart));renderCart()}
-function money(value){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(value)}
-function visibleProducts(){let list=PRODUCTS.filter(p=>(category==='All'||p.category===category)&&`${p.name} ${p.description} ${p.category}`.toLowerCase().includes(searchTerm.toLowerCase()));const sort=$('#sortSelect').value;if(sort==='low')list.sort((a,b)=>a.price-b.price);if(sort==='high')list.sort((a,b)=>b.price-a.price);if(sort==='name')list.sort((a,b)=>a.name.localeCompare(b.name));return list}
-function renderProducts(){const products=visibleProducts();grid.innerHTML=products.length?products.map(p=>`<article class="product-card"><div class="product-image-wrap">${p.tag?`<span class="product-tag">${p.tag}</span>`:''}<img class="product-image" src="${p.image}" alt="${p.name}" loading="lazy"></div><div class="product-info"><div><p class="product-category">${p.category}</p><h3>${p.name}</h3><p class="product-description">${p.description}</p></div><div class="product-buy"><strong>${money(p.price)}</strong><button class="add-button" data-add="${p.id}" aria-label="Add ${p.name} to bag">+</button></div></div></article>`).join(''):'<p class="no-results">No activities found. Try another search.</p>'}
-function renderCart(){const entries=Object.entries(cart).filter(([,qty])=>qty>0);const count=entries.reduce((sum,[,qty])=>sum+qty,0);const subtotal=entries.reduce((sum,[id,qty])=>sum+(PRODUCTS.find(p=>p.id===id)?.price||0)*qty,0);$('#bagCount').textContent=count;$('#drawerCount').textContent=`(${count})`;$('#cartSubtotal').textContent=money(subtotal);$('#cartEmpty').hidden=entries.length>0;$('#cartFooter').hidden=entries.length===0;$('#cartItems').innerHTML=entries.map(([id,qty])=>{const p=PRODUCTS.find(item=>item.id===id);if(!p)return '';return `<div class="cart-item"><img src="${p.image}" alt=""><div class="cart-item-info"><h3>${p.name}</h3><p>${money(p.price)}</p><div class="quantity-control"><button data-qty="down" data-id="${id}" aria-label="Decrease quantity">−</button><span>${qty}</span><button data-qty="up" data-id="${id}" aria-label="Increase quantity">+</button></div></div><button class="remove-button" data-remove="${id}" aria-label="Remove ${p.name}">×</button></div>`}).join('')}
-function openCart(){cartDrawer.classList.add('open');cartDrawer.setAttribute('aria-hidden','false');overlay.hidden=false;requestAnimationFrame(()=>overlay.classList.add('visible'));document.body.classList.add('drawer-open')}
-function closeCart(){cartDrawer.classList.remove('open');cartDrawer.setAttribute('aria-hidden','true');overlay.classList.remove('visible');document.body.classList.remove('drawer-open');setTimeout(()=>overlay.hidden=true,250)}
-grid.addEventListener('click',e=>{const button=e.target.closest('[data-add]');if(!button)return;const id=button.dataset.add;cart[id]=(cart[id]||0)+1;saveCart();button.textContent='✓';setTimeout(()=>button.textContent='+',700)});
-$('#cartItems').addEventListener('click',e=>{const qty=e.target.closest('[data-qty]');const remove=e.target.closest('[data-remove]');if(remove){delete cart[remove.dataset.remove];saveCart();return}if(qty){const id=qty.dataset.id;if(qty.dataset.qty==='up')cart[id]=(cart[id]||0)+1;else cart[id]=Math.max(0,(cart[id]||0)-1);if(cart[id]===0)delete cart[id];saveCart()}});
-$('#categoryList').addEventListener('click',e=>{const button=e.target.closest('[data-category]');if(!button)return;category=button.dataset.category;document.querySelectorAll('.category-chip').forEach(chip=>chip.classList.toggle('active',chip===button));renderProducts()});
-$('#sortSelect').addEventListener('change',renderProducts);
-$('#bagToggle').addEventListener('click',openCart);$('#closeDrawer').addEventListener('click',closeCart);overlay.addEventListener('click',closeCart);$('#continueShopping').addEventListener('click',closeCart);
-$('#menuToggle').addEventListener('click',()=>{const menu=$('#mobileMenu');const isOpen=!menu.hidden;menu.hidden=isOpen;$('#menuToggle').setAttribute('aria-expanded',String(!isOpen))});
-document.querySelectorAll('[data-nav-category]').forEach(link=>link.addEventListener('click',()=>{category=link.dataset.navCategory;document.querySelectorAll('.category-chip').forEach(chip=>chip.classList.toggle('active',chip.dataset.category===category));renderProducts();}));
-$('#searchToggle').addEventListener('click',()=>{$('#searchBar').hidden=false;$('#searchInput').focus()});$('#searchClose').addEventListener('click',()=>{$('#searchBar').hidden=true;$('#searchInput').value='';searchTerm='';renderProducts()});$('#searchInput').addEventListener('input',e=>{searchTerm=e.target.value;renderProducts()});
-$('#checkoutButton').addEventListener('click',()=>{closeCart();$('#checkoutDialog').showModal();const mount=$('#paypalMount');mount.innerHTML='';if(PAYPAL_HOSTED_BUTTON_ID==='YOUR_PAYPAL_HOSTED_BUTTON_ID'){mount.innerHTML='<p class="paypal-placeholder">PayPal setup is pending. Add a hosted button ID in app.js to accept payments.</p>'}else{const form=document.createElement('form');form.action=`https://${PAYPAL_ENVIRONMENT}/cgi-bin/webscr`;form.method='post';form.target='_top';form.innerHTML=`<input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="${PAYPAL_HOSTED_BUTTON_ID}"><input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" name="submit" alt="Buy Now with PayPal">`;mount.appendChild(form)}});
-$('#closeCheckout').addEventListener('click',()=>$('#checkoutDialog').close());$('#backToBag').addEventListener('click',()=>{$('#checkoutDialog').close();openCart()});$('#checkoutDialog').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
-$('#newsletterForm').addEventListener('submit',e=>{e.preventDefault();$('#newsletterMessage').textContent='Welcome to the 123kids club!';e.target.reset()});
-$('#year').textContent=new Date().getFullYear();renderProducts();renderCart();
+// 123kids storefront preview: cart interactions only; no payment or email data is transmitted.
+const toast = document.querySelector('#toast');
+let toastTimer;
+function announce(message) {
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+}
+const bookNames = {
+  'first-book': 'My First Big Coloring Book',
+  'explorers-book': 'Little Explorers Coloring Adventures'
+};
+const cart = [];
+document.querySelectorAll('[data-product]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const id = button.dataset.product;
+    if (id === 'both-books') {
+      cart.push(bookNames['first-book'], bookNames['explorers-book']);
+      announce('Both coloring books added — $20 before any eligible offer.');
+    } else {
+      cart.push(bookNames[id]);
+      announce(`${bookNames[id]} added — $10. Checkout setup is still needed.`);
+    }
+  });
+});
+document.querySelector('#newsletterForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+  document.querySelector('#newsletterMessage').textContent = 'Thanks for your interest! Signup is not connected yet, so your email was not sent or stored. Email verification and coupon delivery must be set up before this offer can be redeemed.';
+});
+document.querySelector('#year').textContent = new Date().getFullYear();
