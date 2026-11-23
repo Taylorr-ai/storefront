@@ -17,7 +17,7 @@ style.textContent = `
 .verification-dialog iframe{display:block;width:100%;height:min(78vh,700px);border:0}
 .verification-price{position:relative;display:none;text-align:center;padding:48px 18px 18px}.verification-price.ready{display:block}
 #verified-paypal{min-height:55px;margin:12px auto 0}
-.verification-close{position:absolute;top:10px;right:12px;width:40px;height:40px;border:0;border-radius:50%;background:#fff;color:#28343a;font-size:28px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(40,52,58,.18)}
+.verification-close{position:absolute;top:10px;right:12px;z-index:2;width:40px;height:40px;border:0;border-radius:50%;background:#fff;color:#28343a;font-size:28px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(40,52,58,.25)}
 .verification-close:hover{background:#ffda58}
 `;
 document.head.appendChild(style);
@@ -30,10 +30,11 @@ modal.setAttribute('aria-modal', 'true');
 modal.setAttribute('aria-label', 'Verify email for 50 percent off');
 modal.innerHTML = `
   <div class="verification-dialog">
+    <button class="verification-close" id="verificationClose" type="button" aria-label="Close verification form">×</button>
     <iframe title="Verify email with Jotform" src="https://form.jotform.com/263265036863057"></iframe>
   </div>
   <div class="verification-price" id="verificationPrice">
-    <button class="verification-close" id="verificationClose" type="button" aria-label="Close and continue shopping">×</button>
+    <button class="verification-close" id="verificationCloseCheckout" type="button" aria-label="Close checkout">×</button>
     <h2>Email verified</h2>
     <p>Verified 50% checkout price: $5 per book</p>
     <div id="verified-paypal"></div>
@@ -48,6 +49,10 @@ if (url.searchParams.get('email_verified') === '1') {
   sessionStorage.setItem('123kidsEmailVerified', 'true');
   url.searchParams.delete('email_verified');
   window.history.replaceState({}, document.title, url.pathname + (url.search ? url.search : '') + url.hash);
+}
+
+function closeModal() {
+  modal.classList.remove('open');
 }
 
 function openVerification() {
@@ -73,13 +78,19 @@ function showVerifiedCheckout() {
 }
 
 function renderPayPal() {
-  if (!window.paypal || document.querySelector('#verified-paypal').dataset.rendered) return;
-  document.querySelector('#verified-paypal').dataset.rendered = 'true';
+  const paypalContainer = document.querySelector('#verified-paypal');
+  if (!window.paypal || paypalContainer.dataset.rendered) return;
+  paypalContainer.dataset.rendered = 'true';
   window.paypal.HostedButtons({ hostedButtonId: 'LYRQKCG3HUQ6J' }).render('#verified-paypal');
 }
 
-document.querySelector('#verificationClose').addEventListener('click', () => {
-  modal.classList.remove('open');
+document.querySelector('#verificationClose').addEventListener('click', closeModal);
+document.querySelector('#verificationCloseCheckout').addEventListener('click', closeModal);
+modal.addEventListener('click', (event) => {
+  if (event.target === modal) closeModal();
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && modal.classList.contains('open')) closeModal();
 });
 
 if (isVerified) showVerifiedCheckout();
