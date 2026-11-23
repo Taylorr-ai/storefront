@@ -15,8 +15,10 @@ style.textContent = `
 .verification-modal.open{display:flex}
 .verification-dialog{position:relative;width:min(680px,100%);max-height:92vh;border-radius:18px;background:#fffaf0;box-shadow:0 20px 60px rgba(40,52,58,.35);overflow:hidden}
 .verification-dialog iframe{display:block;width:100%;height:min(78vh,700px);border:0}
-.verification-price{display:none;text-align:center;padding:18px}.verification-price.ready{display:block}
+.verification-price{position:relative;display:none;text-align:center;padding:48px 18px 18px}.verification-price.ready{display:block}
 #verified-paypal{min-height:55px;margin:12px auto 0}
+.verification-close{position:absolute;top:10px;right:12px;width:40px;height:40px;border:0;border-radius:50%;background:#fff;color:#28343a;font-size:28px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(40,52,58,.18)}
+.verification-close:hover{background:#ffda58}
 `;
 document.head.appendChild(style);
 
@@ -31,6 +33,7 @@ modal.innerHTML = `
     <iframe title="Verify email with Jotform" src="https://form.jotform.com/263265036863057"></iframe>
   </div>
   <div class="verification-price" id="verificationPrice">
+    <button class="verification-close" id="verificationClose" type="button" aria-label="Close and continue shopping">×</button>
     <h2>Email verified</h2>
     <p>Verified 50% checkout price: $5 per book</p>
     <div id="verified-paypal"></div>
@@ -49,6 +52,7 @@ if (url.searchParams.get('email_verified') === '1') {
 
 function openVerification() {
   modal.classList.add('open');
+  document.querySelector('.verification-dialog').style.display = '';
   document.querySelector('#verificationPrice').classList.remove('ready');
 }
 
@@ -73,6 +77,10 @@ function renderPayPal() {
   document.querySelector('#verified-paypal').dataset.rendered = 'true';
   window.paypal.HostedButtons({ hostedButtonId: 'LYRQKCG3HUQ6J' }).render('#verified-paypal');
 }
+
+document.querySelector('#verificationClose').addEventListener('click', () => {
+  modal.classList.remove('open');
+});
 
 if (isVerified) showVerifiedCheckout();
 
